@@ -13,7 +13,7 @@ class SpecialOccasionsPlugin(PluginBase):
     @property
     def plugin_id(self) -> str:
         """Return the plugin ID - must match manifest.json 'id' field."""
-        return "special_occasion"
+        return "special_occasions"
 
     def fetch_data(self):
         # Default state if no occasion matches today
