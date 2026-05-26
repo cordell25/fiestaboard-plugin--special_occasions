@@ -62,7 +62,7 @@
               "title": "Description",
               "description": "Additional Details"
             }
-          }
+          },
           "required": [
             "type",
             "month",
