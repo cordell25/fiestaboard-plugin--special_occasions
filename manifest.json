@@ -70,8 +70,7 @@
             "name"
           ]
         }
-      }
-      
+      },
       "refresh_seconds": {
         "type": "integer",
         "title": "Refresh Interval (seconds)",
