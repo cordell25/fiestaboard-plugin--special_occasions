@@ -1,12 +1,12 @@
 {
-  "id": "timer",
-  "name": "Timer",
-  "version": "1.6.0",
-  "description": "A local timer that counts down automatically and calculates block durations.",
+  "id": "special_occasions",
+  "name": "Special Occasions",
+  "version": "0.1",
+  "description": "A plugin to automate varibles that can be used to build Pages for Birthdays, Anniversarys, etc.",
   "author": "Andrew Cordell",
-  "icon": "stopwatch",
+  "icon": "gift",
   "category": "utility",
-  "repository": "https://github.com/cordell25/fiestaboard-plugin--timer",
+  "repository": "https://github.com/cordell25/special_dates",
   
   "settings_schema": {
     "type": "object",
@@ -17,145 +17,96 @@
         "title": "Enabled",
         "default": false
       },
-      "secret": {
-        "type": "string",
-        "title": "HMAC Secret",
-        "description": "Optional secret to verify incoming webhooks (leave blank to disable).",
-        "default": ""
-      },
-      "status_color": {
-        "type": "string",
-        "title": "Flap Color",
-        "description": "Flap color for 'status_display' variable",
-        "enum": [
-          "red",
-          "orange",
-          "yellow",
-          "green",
-          "blue",
-          "violet",
-          "white",
-          "black"
-        ],
-        "default": "yellow"
-      },
-      "status_color_completed": {
-        "type": "string",
-        "title": "Flap Color (Completed)",
-        "description": "Flap color for completed flaps displayed within 'status_display_padded' variable",
-        "enum": [
-          "red",
-          "orange",
-          "yellow",
-          "green",
-          "blue",
-          "violet",
-          "white",
-          "black"
-        ],
-        "default": "black"
-      },
-      "max_status_flaps": {
-        "type": "integer",
-        "title": "Max Status Flaps",
-        "description": "The number of colored flaps that represent 100% of the Time remaining. If displaying on a single row, on a Note, this should be at most 15, and on a Flagship, at most 22",
-        "default": 13,
-        "minimum": 4,
-        "maximum": 132
-      },
-      "default_measure": {
-        "type": "string",
-        "title": "Default Timer Value Qualifier",
-        "description": "Is the Timer API receiving minutes or seconds by default",
-        "enum": [
-          "minutes",
-          "seconds"
-        ],
-        "default": "minutes"
-      },
+      
+      "occasions": {
+        "type": "array",
+        "title": "Special Occasions",
+        "description": "Dates and Descriptions of special occasions that occur annually",
+        "minItems": 1,
+        "maxItems": 25,
+        "items": {
+          "type": "object",
+          "properties": {
+            "type": {
+              "type": "string",
+              "title": "Type",
+              "description": "",
+              "enum": [
+                "Holiday",
+                "Birthday",
+                "Anniversary",
+                "Other"
+              ],
+              "default": "Holiday"
+            },
+            "month": {
+              "type": "integer",
+              "title": "Month",
+              "description": "The Numeric Month (1=Jan, 12=Dec)",
+              "enum": [
+                1,2,3,4,5,6,7,8,9,10,11,12
+              ],
+            },
+            "day": {
+              "type": "integer",
+              "title": "Day",
+              "description": "The Numeric Day (1-31)"
+            },
+            "name": {
+              "type": "string",
+              "title": "Name",
+              "description": "The Name of the Holiday or who's Birthday, etc"
+            }
+            "description": {
+              "type": "string",
+              "title": "Description",
+              "description": "Additional Details"
+            }
+          }
+          "required": [
+            "type",
+            "month",
+            "day",
+            "name"
+          ]
+        }
+      }
+      
       "refresh_seconds": {
         "type": "integer",
         "title": "Refresh Interval (seconds)",
-        "description": "How often the board polls for new data.",
-        "default": 10,
-        "minimum": 5
+        "description": "How often to check this plugin (default, hourly)",
+        "default": 3600,
+        "minimum": 60,
+        "maximum": 86400
       }
-    },
-    "required": ["max_status_flaps", "status_color", "status_color_completed"]
   },
   "variables": {
     "simple": {
-      "start_time": {
-        "description": "Date & Time of when the Timer begins (ISO format)",
-        "max_length": 19,
-        "example": "2025-06-15T00:00:00"
+      "special_day_type": {
+        "description": "Type of Special Occasion",
+        "max_length": 20,
+        "example": "Holiday"
       },
-      "end_time": {
-        "description": "Date & Time of when the Timer ends (ISO format)",
-        "max_length": 19,
-        "example": "2025-06-15T00:00:00"
-      },
-      "duration": {
-        "description": "Integer Value of how long the Timer is set for",
-        "type": "integer",
-        "max_length": 3,
-        "example": "5"
-      },
-      "measure": {
-        "description": "minutes or seconds",
-        "type": "string",
-        "max_length": 7,
-        "example": "minutes"
-      },
-      "status_max_length": {
-        "description": "How many status blocks represent the full amount of time",
-        "type": "integer",
-        "max_length": 2,
-        "example": "13"
-      },
-      "status_current_length": {
-        "description": "current status blocks represent the time remaining",
-        "type": "integer",
-        "max_length": 2,
-        "example": "10"
-      },
-      "status_display": {
-        "description": "visual display of what % of time remains on the timer (starting at status_max_length = 100%",
-        "type": "string",
-        "max_length": 200
-      },
-      "status_display_padded": {
-        "description": "visual display of what % of time remains on the timer with padding so the status bar remains the same length throughout the timer (set to status_max_length = 100%",
-        "type": "string",
-        "max_length": 200
-      },
-      "minutes_remaining": {
-        "description": "minutes remaining",
-        "type": "integer",
-        "max_length": 3,
-        "example": "4"
-      },
-      "seconds_remaining": {
-        "description": "seconds remaining",
-        "type": "integer",
+      "special_day_date": {
+        "description": "Date of Special Occasion (ISO Format)",
         "max_length": 10,
-        "example": "180"
+        "example": "2025-12-25"
       },
-      "status_block_duration": {
-        "description": "How much time elapses before another status block is removed",
-        "type": "integer",
-        "max_length": 2,
-        "example": "15"
-      },
-      "last_updated": {
-        "description": "When the last timer API call was received",
+      "special_day_name": {
+        "description": "Name of the Holiday or Birthday, etc",
         "type": "string",
-        "max_length": 16,
-        "group": "payload",
-        "example": "2026-05-01 12:00"
+        "max_length": 20,
+        "example": "CHRISTMAS"
       },
-      "timer_in_flight": {
-        "description": "Is the Timer current counting down?",
+      "special_day_description": {
+        "description": "Additional Details",
+        "type": "string",
+        "max_length": 50,
+        "example": "OUR FAVORITE HOLIDAY"
+      },
+      "is_today_special": {
+        "description": "Is today a day identified as a special occasion?",
         "type": "boolean",
         "example": true
       }
@@ -163,11 +114,11 @@
   },
   "demo": {
     "note": {
-      "name": "API Triggered Countdown Timer",
+      "name": "Special Occasion",
       "template": [
-        "{{timer.duration}} {{timer.measure}}",
-        "{{red}}{{timer.status_display_padded}}{{green}}",
-        "{{= IF(timer.seconds_remaining = 0,\"TIME'S UP\") }}"
+        "Yahoo",
+        "",
+        ""
       ],
       "line_metadata": [
         {
@@ -175,7 +126,7 @@
           "wrap": false
         },
         {
-          "alignment": "left",
+          "alignment": "center",
           "wrap": true
         },
         {
