@@ -56,7 +56,7 @@
               "type": "string",
               "title": "Name",
               "description": "The Name of the Holiday or who's Birthday, etc"
-            }
+            },
             "description": {
               "type": "string",
               "title": "Description",
