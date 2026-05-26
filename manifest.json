@@ -1,7 +1,7 @@
 {
   "id": "special_occasions",
   "name": "Special Occasions",
-  "version": "0.1",
+  "version": "0.1.0",
   "description": "A plugin to automate varibles that can be used to build Pages for Birthdays, Anniversarys, etc.",
   "author": "Andrew Cordell",
   "icon": "gift",
