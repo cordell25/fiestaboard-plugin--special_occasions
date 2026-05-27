@@ -22,57 +22,37 @@ class SpecialOccasionsPlugin(PluginBase):
         
         # Default state if no occasion matches today
         data = {
-            "special_day_type": "",
+            "special_day_type": "N/A",
             "special_day_date": "",
-            "special_day_name": "",
-            "special_day_description": "",
+            "special_day_name": "N/A",
+            "special_day_description": "N/A",
             "is_today_special": False
         }
 
         occasions = config.get("occasions", [])
         today = datetime.date.today()
 
-        # Lists to hold data in case there are multiple events today
-        matched_names = []
-        matched_descriptions = []
-        matched_types = []
-
         for occasion in occasions:
             try:
+                logger.debug("looping occasions")
                 month = int(occasion.get("month", 0))
+                logger.debug(month)
                 day = int(occasion.get("day", 0))
+                logger.debug(day)
             except (ValueError, TypeError):
                 logger.error(f"Invalid date format in occasion: {occasion.get('name')}")
                 continue
 
             # If the date matches today, collect the data instead of breaking
             if month == today.month and day == today.day:
+                logger.debug("Match on Date")
                 data["is_today_special"] = True
+                data["special_day_type"] = occasion.get("type")
                 data["special_day_date"] = today.isoformat()
-                
-                name = occasion.get("name")
-                if name:
-                    matched_names.append(name)
-                    
-                description = occasion.get("description")
-                if description:
-                    matched_descriptions.append(description)
-                    
-                occasion_type = occasion.get("type", "Holiday")
-                if occasion_type:
-                    matched_types.append(occasion_type)
+                data["special_day_name"] = occasion.get("name")
+                data["special_day_description"] = occasion.get("description")
 
-        # If we found any matches, join them together for the variables
-        if data["is_today_special"]:
-            data["special_day_name"] = " & ".join(matched_names)
-            
-            # Filter out empty descriptions before joining
-            valid_descriptions = [desc for desc in matched_descriptions if desc.strip()]
-            data["special_day_description"] = " | ".join(valid_descriptions)
-            
-            # Deduplicate types
-            unique_types = list(dict.fromkeys(matched_types))
-            data["special_day_type"] = " / ".join(unique_types)
+                return PluginResult(available=True, data=data)
 
         return PluginResult(available=True, data=data)
         
