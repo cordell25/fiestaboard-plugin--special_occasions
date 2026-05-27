@@ -35,7 +35,7 @@ class SpecialOccasionsPlugin(PluginBase):
         }
 
         occasions = config.get("occasions", [])
-        today = datetime.now(tz).date()
+        today = datetime.now(tz)
 
         for occasion in occasions:
             try:
