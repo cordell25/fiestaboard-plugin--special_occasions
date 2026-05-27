@@ -23,8 +23,6 @@ class SpecialOccasionsPlugin(PluginBase):
 
         from src.config import Config
         timezone_str = Config.GENERAL_TIMEZONE or "America/Los_Angeles"
-        logger.info("Timezone:")
-        logger.info(timezone_str)
         tz = ZoneInfo(timezone_str)
         now = datetime.now(tz)
         
@@ -46,13 +44,8 @@ class SpecialOccasionsPlugin(PluginBase):
                 logger.error(f"Invalid date format in occasion: {occasion.get('name')}")
                 continue
             
-            logger.info("Today")
-            logger.info(now.month)
-            logger.info(now.day)
-            
             # If the date matches today, collect the data instead of breaking
             if month == now.month and day == now.day:
-                logger.info("Match on Date")
                 data["is_today_special"] = True
                 data["special_day_type"] = occasion.get("type")
                 data["special_day_date"] = now.isoformat()
