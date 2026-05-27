@@ -34,18 +34,18 @@ class SpecialOccasionsPlugin(PluginBase):
 
         for occasion in occasions:
             try:
-                logger.debug("looping occasions")
+                logger.info("looping occasions")
                 month = int(occasion.get("month", 0))
-                logger.debug(month)
+                logger.info(month)
                 day = int(occasion.get("day", 0))
-                logger.debug(day)
+                logger.info(day)
             except (ValueError, TypeError):
                 logger.error(f"Invalid date format in occasion: {occasion.get('name')}")
                 continue
 
             # If the date matches today, collect the data instead of breaking
             if month == today.month and day == today.day:
-                logger.debug("Match on Date")
+                logger.info("Match on Date")
                 data["is_today_special"] = True
                 data["special_day_type"] = occasion.get("type")
                 data["special_day_date"] = today.isoformat()
