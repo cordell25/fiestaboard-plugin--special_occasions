@@ -1,9 +1,10 @@
 """Special Occasion Plugin for FiestaBoard."""
 
 import datetime
-import logging
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from src.plugins.base import PluginBase, PluginResult
 
+import logging
 logger = logging.getLogger(__name__)
 
 class SpecialOccasionsPlugin(PluginBase):
@@ -19,6 +20,10 @@ class SpecialOccasionsPlugin(PluginBase):
         config = self.config
         if not config:
             return None
+
+        from src.config import Config
+        timezone_str = Config.GENERAL_TIMEZONE or "America/Los_Angeles"
+        tz = ZoneInfo(timezone_str)
         
         # Default state if no occasion matches today
         data = {
@@ -30,7 +35,7 @@ class SpecialOccasionsPlugin(PluginBase):
         }
 
         occasions = config.get("occasions", [])
-        today = datetime.date.today(Config.GENERAL_TIMEZONE)
+        today = datetime.date.today(tz)
 
         for occasion in occasions:
             try:
