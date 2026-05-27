@@ -15,9 +15,9 @@ class SpecialOccasionsPlugin(PluginBase):
         """Return the plugin ID - must match manifest.json 'id' field."""
         return "special_occasions"
 
-    def fetch_data(self):
+    def fetch_data(self) -> PluginResult:
         # Default state if no occasion matches today
-        result_data = {
+        data = {
             "special_day_type": "",
             "special_day_date": "",
             "special_day_name": "",
@@ -43,8 +43,8 @@ class SpecialOccasionsPlugin(PluginBase):
 
             # If the date matches today, collect the data instead of breaking
             if month == today.month and day == today.day:
-                result_data["is_today_special"] = True
-                result_data["special_day_date"] = today.isoformat()
+                data["is_today_special"] = True
+                data["special_day_date"] = today.isoformat()
                 
                 name = occasion.get("name")
                 if name:
@@ -59,18 +59,18 @@ class SpecialOccasionsPlugin(PluginBase):
                     matched_types.append(occasion_type)
 
         # If we found any matches, join them together for the variables
-        if result_data["is_today_special"]:
-            result_data["special_day_name"] = " & ".join(matched_names)
+        if data["is_today_special"]:
+            data["special_day_name"] = " & ".join(matched_names)
             
             # Filter out empty descriptions before joining
             valid_descriptions = [desc for desc in matched_descriptions if desc.strip()]
-            result_data["special_day_description"] = " | ".join(valid_descriptions)
+            data["special_day_description"] = " | ".join(valid_descriptions)
             
             # Deduplicate types
             unique_types = list(dict.fromkeys(matched_types))
-            result_data["special_day_type"] = " / ".join(unique_types)
+            data["special_day_type"] = " / ".join(unique_types)
 
-        return PluginResult(result_data)
+        return PluginResult(available=True, data=data)
         
     def validate_config(self, config: Dict[str, Any]) -> List[str]:
         errors = []
