@@ -16,6 +16,10 @@ class SpecialOccasionsPlugin(PluginBase):
         return "special_occasions"
 
     def fetch_data(self) -> PluginResult:
+        config = self.config
+        if not config:
+            return None
+        
         # Default state if no occasion matches today
         data = {
             "special_day_type": "",
