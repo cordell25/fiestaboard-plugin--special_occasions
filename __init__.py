@@ -42,7 +42,11 @@ class SpecialOccasionsPlugin(PluginBase):
             except (ValueError, TypeError):
                 logger.error(f"Invalid date format in occasion: {occasion.get('name')}")
                 continue
-
+            
+            logger.info("Today")
+            logger.info(today.month)
+            logger.info(today.day)
+            
             # If the date matches today, collect the data instead of breaking
             if month == today.month and day == today.day:
                 logger.info("Match on Date")
