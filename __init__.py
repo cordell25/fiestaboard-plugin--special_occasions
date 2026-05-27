@@ -30,15 +30,12 @@ class SpecialOccasionsPlugin(PluginBase):
         }
 
         occasions = config.get("occasions", [])
-        today = datetime.date.today()
+        today = datetime.date.today(Config.GENERAL_TIMEZONE)
 
         for occasion in occasions:
             try:
-                logger.info("looping occasions")
                 month = int(occasion.get("month", 0))
-                logger.info(month)
                 day = int(occasion.get("day", 0))
-                logger.info(day)
             except (ValueError, TypeError):
                 logger.error(f"Invalid date format in occasion: {occasion.get('name')}")
                 continue
