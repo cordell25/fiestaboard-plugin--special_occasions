@@ -55,7 +55,7 @@ class SpecialOccasionsPlugin(PluginBase):
                 logger.info("Match on Date")
                 data["is_today_special"] = True
                 data["special_day_type"] = occasion.get("type")
-                data["special_day_date"] = today.isoformat()
+                data["special_day_date"] = now.isoformat()
                 data["special_day_name"] = occasion.get("name")
                 data["special_day_description"] = occasion.get("description")
 
