@@ -1,6 +1,6 @@
 """Special Occasion Plugin for FiestaBoard."""
 
-import datetime
+from datetime import datetime
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from src.plugins.base import PluginBase, PluginResult
 
