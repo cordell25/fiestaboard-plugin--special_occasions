@@ -25,7 +25,7 @@ class SpecialOccasionsPlugin(PluginBase):
             "is_today_special": False
         }
 
-        occasions = self.settings.get("occasions", [])
+        occasions = config.get("occasions", [])
         today = datetime.date.today()
 
         # Lists to hold data in case there are multiple events today
